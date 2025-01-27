@@ -75,11 +75,9 @@ lm_price_year <- lm(latestPrice~yearBuilt, ver4)
 summary(lm_price_year)
 # 1209.2 slope with high significance
 # suggests that the newer the house is, the more expensive it is, on average
-# but the R^2 is in the garbage dawg .003 horrible model
+# but the R^2 is in the garbage... .003 horrible model
 
 # graph it with the line
-
-
 
 # naive lm by decade
 lm_price_decade <- lm(latestPrice~decadeBuilt, ver4)
@@ -109,10 +107,7 @@ plot(fitted(lm_price_all_decades), resid(lm_price_all_decades),
 abline(0,0)
 
 
-
-
 ##### model selection######
-
 
 # train test split 70% 30%
 set.seed(2023)
@@ -172,12 +167,6 @@ stepAICdecadeTest = lm(formula = latestPrice ~ livingAreaSqFt + zipcode + numOfS
                    data = test)
 
 summary(stepAICdecadeTest)
-
-
-
-
-
-
 
 
 # BIC
@@ -257,63 +246,3 @@ adrsq_new = 1 - (1- rsq_new)*(3561-1)/(3561-41-1)
 
 
 1 - ((1-r.squared)*(nobs(x)-1)/(nobs(x)-length(x$coefficients)-1))
-
-
-
-
-
-##### trash #####
-# both = step(intercept_only, direction="both", scope= list(upper= latestPrice ~.,lower= latestPrice ~ 1), trace=1)
-
-# stepAIC(intercept_only, direction="forward")  # or both, sme result
-
-# so it keeps getting hung up on the intercept. maybe later i can figure out what
-# that means philosophically, but for right now, let's see if starting 
-# somwhere different will coax it into picking a different model
-# hey also isn't aic supposed to pick the bigger models too?...
-year_only = lm(latestPrice ~ yearBuilt, train)
-# stepAIC(year_only, scope= list(upper= latestPrice ~.,lower= latestPrice ~ 1), direction="both", trace = 5)
-
-# what on earth is happening?
-end_model = lm(latestPrice ~ yearBuilt + numOfBathrooms + lotSizeSqFt + numOfWindowFeatures +
-                 city + zipcode + latitude + longitude+ propertyTaxRate +
-                 garageSpaces + hasAssociation + hasCooling + hasGarage +
-                 hasHeating + hasSpa + hasView + parkingSpaces + numPriceChanges +
-                 latest_saledate + latest_salemonth + latest_saleyear +
-                 latestPriceSource + numOfPhotos, train)
-#  stepAIC(start_model, scope= list(upper= latestPrice ~.,lower= latestPrice ~ 1), direction="backward", trace = 5)
-# worked fine with the first 9 of those
-# got slow after 23 variables --> <= 5 min run time
-# Call:
-#   lm(formula = latestPrice ~ numOfBathrooms + hasAssociation + 
-#        zipcode + city + propertyTaxRate + yearBuilt + hasSpa + numOfPhotos + 
-#        numPriceChanges + latitude + longitude + latest_saleyear + 
-#        hasView + garageSpaces + hasGarage + hasHeating, data = train)
-# 
-# Coefficients:
-#   (Intercept)        numOfBathrooms    hasAssociationTRUE               zipcode  
-# 340563580                239236               -127477                 -5476  
-# citydel valle         citydriftwood  citydripping springs          citymanchaca  
-# -689920               -710583                 38919               -504794  
-# citymanor      citypflugerville   citywest lake hills       propertyTaxRate  
-# -151962               -514298                638765              -1408874  
-# yearBuilt            hasSpaTRUE           numOfPhotos       numPriceChanges  
-# -1902                 80089                  1022                -12042  
-# latitude             longitude       latest_saleyear           hasViewTRUE  
-# 482826               -474944                 17833                 26065  
-# garageSpaces         hasGarageTRUE        hasHeatingTRUE  
-# 19615                -44934                 54177
-# ayo why number of photos important??
-
-# aic_model = lm(latestPrice ~ livingAreaSqFt + decadeBuilt + hasAssociation + 
-#                  numOfBedrooms + numOfWaterfrontFeatures + zipcode + propertyTaxRate + 
-#                  city + numPriceChanges + numOfBathrooms + numOfStories + 
-#                  numOfElementarySchools + latest_saleyear + avgSchoolDistance + 
-#                  source + avgSchoolRating + longitude + latitude + hasHeating + 
-#                  numOfCommunityFeatures + numOfParkingFeatures + parkingSpaces + 
-#                  numOfHighSchools + numOfPrimarySchools + numOfMiddleSchools + 
-#                  latest_salemonth + yearBuilt + numOfWindowFeatures + numOfPatioAndPorchFeatures + 
-#                  MedianStudentsPerTeacher + numOfPhotos + lotSizeSqFt + hasSpa, data = train)
-# summary(aic_model)
-
-
